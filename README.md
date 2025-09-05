@@ -23,6 +23,7 @@ Before you begin, ensure you have the following:
 
   * **Python 3.x**
   * The `requests` Python library.
+  * Xcode Command Line Tools (macOS users only): If you are on a Mac, you may need these tools. To install them, open your Terminal and run the command xcode-select --install.
   * A **Juniper Mist account** with API access.
   * A **Mist API Token** with at least Write-level access to Sites and Devices. You can generate this from your Mist account settings (`Mist AI App > User icon > API Tokens`).
 
