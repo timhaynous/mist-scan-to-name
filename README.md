@@ -1,0 +1,97 @@
+-----
+
+# Mist AP Provisioning Script
+
+This Python script streamlines the process of adding and naming new Juniper Mist Access Points (APs) to a specific site within your organization. It automates assigning APs from inventory and renames them according to a standardized convention (`SITE_CODE-AP-FLOOR-##`), reducing manual effort and ensuring naming consistency.
+
+-----
+
+## Features ✨
+
+  * **Interactive Site Selection**: Lists all available sites in your Mist organization for easy selection.
+  * **Standardized Naming**: Automatically retrieves or helps you set a `SITE_CODE` site variable, which is used as a prefix for all new AP names.
+  * **Automated Provisioning**: Assigns APs from your organization's inventory to the chosen site.
+  * **Sequential Renaming**: Renames APs sequentially (e.g., `HQ-AP-FLR01-01`, `HQ-AP-FLR01-02`).
+  * **Conflict Prevention**: Checks for and skips existing AP names to avoid duplicates. It also prevents re-assigning an AP that is already active at another site.
+  * **User-Friendly Input**: Supports direct typing or scanning of AP MAC addresses.
+  * **Clear Error Handling**: Provides feedback for common issues like unclaimed APs or APs already assigned elsewhere.
+  * **Cross-Platform**: Works on both Windows and Unix-like systems (macOS, Linux).
+
+-----
+
+## Prerequisites 📋
+
+Before you begin, ensure you have the following:
+
+  * **Python 3.x**
+  * The `requests` Python library.
+  * A **Juniper Mist account** with API access.
+  * A **Mist API Token** with at least Write-level access to Sites and Devices. You can generate this from your Mist account settings (`Mist AI App > User icon > API Tokens`).
+
+-----
+
+## Setup & Installation ⚙️
+
+1.  **Clone the repository or save the script:**
+    Save the Python code as a `.py` file (e.g., `mist_provisioner.py`).
+
+2.  **Install the required library:**
+    Open your terminal or command prompt and install the `requests` library using pip.
+
+    ```bash
+    pip install requests
+    ```
+
+3.  **Set the Environment Variable:**
+    The script requires your Mist API token to be set as an environment variable named `MIST_TOKEN`.
+
+      * **macOS / Linux:**
+
+        ```bash
+        export MIST_TOKEN="your_api_token_here"
+        ```
+
+        *(To make this permanent, add the line to your `~/.bashrc`, `~/.zshrc`, or shell profile.)*
+
+      * **Windows (Command Prompt):**
+
+        ```cmd
+        set MIST_TOKEN="your_api_token_here"
+        ```
+
+      * **Windows (PowerShell):**
+
+        ```powershell
+        $env:MIST_TOKEN="your_api_token_here"
+        ```
+
+        *(Note: These commands only set the variable for the current terminal session. For a permanent solution, search for "Edit the system environment variables" in Windows.)*
+
+-----
+
+## Usage 🚀
+
+1.  **Run the script** from your terminal:
+
+    ```bash
+    python mist_provisioner.py
+    ```
+
+2.  **Select the target site** from the numbered list presented.
+
+3.  **Set the Site Code**:
+
+      * If a `SITE_CODE` variable is already configured for the site in Mist, the script will use it automatically.
+      * If not, you will be prompted to create one. This code will be saved to your site settings in Mist and used as the prefix for AP names.
+
+4.  **Enter the floor identifier** (e.g., `FLR01`, `LL`, `P2`). This will be embedded in the middle of the AP name. You can leave this blank for single-floor sites.
+
+5.  **Enter the starting number** for the AP sequence (e.g., `1`).
+
+6.  **Scan or type the MAC address** of each AP and press Enter. The script handles various MAC address formats (e.g., `aabbcc112233`, `aa:bb:cc:11:22:33`).
+
+7.  After each successful addition, the script will be ready for the next MAC address. The AP number automatically increments.
+
+8.  When you are finished adding APs for the current floor/batch, type **`p`** and press **Enter** to exit the MAC entry loop.
+
+9.  The script will ask if you are done adding APs. If you confirm, it will print a summary of all the APs that were added during the session and then exit.
